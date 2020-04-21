@@ -12,7 +12,7 @@ def test_guest_can_add_product_to_basket(browser, offer_num):
 
     page.should_be_product_promo_page()
 
-    page.add_to_basket()
+    page.add_to_basket_promo()
 
     page.should_be_correct_product()
     page.should_be_correct_price()
