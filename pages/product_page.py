@@ -18,6 +18,8 @@ class ProductPage(BasePage):
         add_to_basket_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET)
         add_to_basket_button.click()
 
+        return self.browser.find_element(*ProductPageLocators.ADDED_PRODUCT)
+
     def add_to_basket_promo(self):
         add_to_basket_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET)
         add_to_basket_button.click()

@@ -11,6 +11,18 @@ class BasePage():
         self.url = url
         self.browser.implicitly_wait(timeout)
 
+    def find_elements_text(self, how, what, timeout=4):
+        try:
+            elements = WebDriverWait(self.browser, timeout, 1, TimeoutException). \
+                until(Ec.presence_of_all_elements_located((how, what)))
+        except TimeoutException:
+            return False
+
+        for i in range(len(elements)):
+            elements[i] = elements[i].text
+
+        return elements
+
     def go_to_login_page(self):
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
@@ -63,3 +75,7 @@ class BasePage():
             return "No second alert presented"
 
         return alert_text
+
+    def view_basket(self):
+        basket_button = self.browser.find_element(*BasePageLocators.VIEW_BASKET)
+        basket_button.click()
