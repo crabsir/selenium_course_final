@@ -11,6 +11,7 @@ link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
 
 @pytest.mark.login_guest
 class TestLoginFromProductPage():
+    @pytest.mark.need_review
     def test_guest_can_go_to_login_page_from_product_page(self, browser):
         page = ProductPage(browser, link)
         page.open()
@@ -77,6 +78,7 @@ class TestUserAddToBasketFromProductPage():
         page = MainPage(browser, browser.current_url)
         page.should_be_authorized_user()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         page = ProductPage(browser, link)
         page.open()
@@ -93,6 +95,7 @@ class TestUserAddToBasketFromProductPage():
         page.should_not_be_success_message()
 
 
+@pytest.mark.need_review
 def test_guest_can_add_product_to_basket(browser):
     page = ProductPage(browser, link)
     page.open()
@@ -103,6 +106,7 @@ def test_guest_can_add_product_to_basket(browser):
     page.should_be_correct_price()
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     page = ProductPage(browser, link)
     page.open()
