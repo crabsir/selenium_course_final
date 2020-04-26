@@ -1,7 +1,9 @@
 import pytest
-from .pages.product_page import ProductPage
-from .pages.login_page import LoginPage
+import random
 from .pages.basket_page import BasketPage
+from .pages.login_page import LoginPage
+from .pages.main_page import MainPage
+from .pages.product_page import ProductPage
 
 
 link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
@@ -26,7 +28,7 @@ class TestLoginFromProductPage():
 
 
 @pytest.mark.product_page_promo
-class TestProductPagePromo:
+class TestProductPagePromo():
     def test_guest_can_add_product_to_basket_promo(self, browser):
         link_promo = link + "?promo=newYear2019"
         page = ProductPage(browser, link_promo)
@@ -53,6 +55,52 @@ class TestProductPagePromo:
 
         page.should_be_correct_product()
         page.should_be_correct_price()
+
+
+@pytest.mark.user
+class TestUserAddToBasketFromProductPage():
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        page = ProductPage(browser, link)
+        page.open()
+        page.go_to_login_page()
+
+        page = LoginPage(browser, browser.current_url)
+
+        page.should_be_login_page()
+
+        random_number = str(random.randint(0, 10000))
+        email = f"user_{random_number}@mail{random_number}.com"
+        password = f"random_password_{random_number}"
+        page.register_new_user(email, password)
+
+        page = MainPage(browser, browser.current_url)
+        page.should_be_authorized_user()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        page = ProductPage(browser, link)
+        page.open()
+
+        page.add_to_basket()
+
+        page.should_be_correct_product()
+        page.should_be_correct_price()
+
+    def test_user_cant_see_success_message(self, browser):
+        page = ProductPage(browser, link)
+        page.open()
+
+        page.should_not_be_success_message()
+
+
+def test_guest_can_add_product_to_basket(browser):
+    page = ProductPage(browser, link)
+    page.open()
+
+    page.add_to_basket()
+
+    page.should_be_correct_product()
+    page.should_be_correct_price()
 
 
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
